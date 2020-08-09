@@ -1,0 +1,8 @@
+<package>
+    <!-- Documentation -->
+	<file>doc/context/third/animation/README</file>
+	<!-- Source -->
+	<file>tex/context/third/animation/t-animation.mkvi</file>
+	<!-- Interface -->
+	<file>tex/context/interface/third/t-animation.xml</file>
+</package>

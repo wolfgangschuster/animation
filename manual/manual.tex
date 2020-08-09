@@ -1,0 +1,135 @@
+\startbuffer[a]
+def start_everything = enddef ;
+def stop_everything = enddef ;
+\stopbuffer
+
+\startbuffer[a]
+def start_everything =
+  path bb ;
+  draw_basics ;
+  draw_circles ;
+  draw_intersection ;
+  draw_bisector ;
+  draw_midpoint ;
+  bb := boundingbox currentpicture ;
+  currentpicture := nullpicture ;
+enddef ;
+
+def stop_everything =
+  setbounds currentpicture to bb ;
+enddef ;
+\stopbuffer
+
+\startbuffer[b]
+numeric u, w ; u := .5cm ; w := 1pt ;
+
+pickup pencircle scaled w ;
+
+def draw_dot expr p =
+  draw p withpen pencircle scaled 3w ;
+enddef ;
+
+def stand_out =
+  drawoptions(withcolor .625red) ;
+enddef ;
+\stopbuffer
+
+\startbuffer[c]
+def draw_basics =
+  pair pointA, pointB ; path lineAB ;
+  pointA := origin ; pointB := pointA shifted (5u,0) ;
+  lineAB := pointA -- pointB ;
+  draw lineAB ;
+  draw_dot pointA ; label.lft(btex A etex, pointA) ;
+  draw_dot pointB ; label.rt (btex B etex, pointB) ;
+enddef ;
+\stopbuffer
+
+\startbuffer[1]
+start_everything ;
+  stand_out ; draw_basics ;
+stop_everything ;
+\stopbuffer
+
+\startbuffer[d]
+def draw_circles =
+  path circleA, circleB ; numeric radius, distance ;
+  distance := (xpart pointB) - (xpart pointA) ;
+  radius := 2/3 * distance ;
+  circleA := fullcircle scaled (2*radius) ;
+  circleB := circleA shifted pointB ;
+  draw circleA ; draw circleB ;
+enddef ;
+\stopbuffer
+
+\startbuffer[2]
+start_everything ;
+  draw_basics ; stand_out ; draw_circles ;
+stop_everything ;
+\stopbuffer
+
+\startbuffer[e]
+def draw_intersection =
+  pair pointC, pointD ;
+  pointC := circleA intersectionpoint circleB ;
+  pointD := (reverse circleA) intersectionpoint (reverse circleB) ;
+  draw_dot pointC ; label.lft(btex C etex, pointC shifted (-2w,0)) ;
+  draw_dot pointD ; label.lft(btex D etex, pointD shifted (-2w,0)) ;
+enddef ;
+\stopbuffer
+
+\startbuffer[3]
+start_everything ;
+  draw_basics ; draw_circles ; stand_out ; draw_intersection ;
+stop_everything ;
+\stopbuffer
+
+\startbuffer[f]
+def draw_bisector =
+  path lineCD ;
+  lineCD := origin -- origin shifted (2*distance,0) ;
+  lineCD := lineCD rotated 90 shifted 0.5[pointA,pointB] ;
+  lineCD := lineCD shifted (0,-distance) ; drawdblarrow lineCD ;
+enddef ;
+\stopbuffer
+
+\startbuffer[4]
+start_everything ;
+  draw_basics ; draw_circles ; draw_intersection ; stand_out ;
+  draw_bisector ;
+stop_everything ;
+\stopbuffer
+
+\startbuffer[g]
+def draw_midpoint =
+  pair pointM ;
+  pointM := lineCD intersectionpoint lineAB ;
+  draw_dot pointM ; label.llft(btex M etex, pointM) ;
+enddef ;
+\stopbuffer
+
+\startbuffer[5]
+start_everything ;
+  draw_basics ; draw_circles ; draw_intersection ; draw_bisector ;
+  stand_out ; draw_midpoint ;
+stop_everything ;
+\stopbuffer
+
+\startbuffer[h]
+def stop_everything =
+  setbounds currentpicture to bb ;
+  draw bb withpen pencircle scaled .5pt withcolor .625yellow ;
+  currentpicture := currentpicture scaled .4 ;
+enddef ;
+\stopbuffer
+
+\placefigure [here][fig:steps]
+  {Bisecting a line segment with compass and straightedge? Just click \goto {here} [JS(Walk_Field{animation:midpoint construction})]
+   to walk through the construction! (This stack is only visible in a \PDF\ viewer that supports widgets.)}
+  {\startanimation[midpoint construction][frame=on,offset=3pt,framecolor=darkyellow,rulethickness=1pt]
+     {\processMPbuffer[a,b,c,d,e,f,g,1]}
+     {\processMPbuffer[a,b,c,d,e,f,g,2]}
+     {\processMPbuffer[a,b,c,d,e,f,g,3]}
+     {\processMPbuffer[a,b,c,d,e,f,g,4]}
+     {\processMPbuffer[a,b,c,d,e,f,g,5]}
+   \stopanimation}
